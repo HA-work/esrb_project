@@ -1,16 +1,12 @@
-import pandas as pd
+# need to remove all the """ strings
+
+# Do not use upyter Notebook
+
+# takes too long
+
+# load relevant libraries
 import numpy as np
-import pickle
-
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-
-
-
-# New imports
-
-
-
+import pandas as pd
 
 import streamlit as st
 
@@ -21,6 +17,8 @@ import seaborn as sns
 
 sns.set()
 
+import pickle
+
 
 
 
@@ -28,7 +26,7 @@ sns.set()
 from sklearn import tree
 
 # Helper function to split our data
-
+from sklearn.model_selection import train_test_split
 
 
 # Helper fuctions to evaluate our model.
@@ -51,33 +49,8 @@ from sklearn.ensemble import RandomForestClassifier
 # If you get an error, run 'conda install python-graphviz' in your terminal (without the quotes).
 import graphviz
 
-#
 
-
-df = pd.read_csv('../data/titanic.csv')
-
-df = pd.get_dummies(df, columns=['sex', 'pclass'], drop_first=True)
-
-selected_features = ['fare', 'pclass_2', 'pclass_3', 'sex_male']
-
-X = df[selected_features]
-
-y = df['survived']
-
-
-model = LogisticRegression()
-
-model.fit(X, y)
-
-
-pickle.dump(model, open('models/model.pkl', 'wb'))
-
-
-# loading the ESRB model
-
-
-
-df = pd.read_csv("video_games_esrb_rating.csv")
+df = pd.read_csv("../data/video_games_esrb_rating.csv")
 
 
 df["strong_language"] = df["strong_janguage"]
@@ -177,10 +150,113 @@ y_pred = final_model.predict(X_test)
 y_pred = final_model.predict(X)
     
 
-# save esrb model
 
-pickle.dump(final_model, open('models/final_model.pkl', 'wb'))
+# Streamlit App
 
-# maybe save the cleaned data in a csv so we do not have to keep cleaning
-# and redoing certain parts
+# Need to use a python file and not an ipynb
 
+df.to_csv('../data/cleaned_games.csv', header=True, index=False)
+
+# original data has header but not index
+# matching so dont need to worry about conflictions
+
+# needed to save it myself
+
+
+pickle.dump(final_model, open('../models/final_model.pkl', 'wb'))
+
+
+
+
+st.set_page_config(
+    page_title="ESRB",
+    page_icon="👋",
+)
+
+st.header("Videogame ESRB Prediction Project")
+
+# do not use JupiterNotebook takes forever
+
+# use Thonny and just refresh in the browser
+
+
+
+st.write("This is a website made to showcase a model to predict the ESRB ratings of Video Games")
+
+st.subheader('First 5 rows of the data after some cleaning.')
+
+st.dataframe(df[:5])
+
+st.subheader('Rating Predictor.')
+
+st.write("Below you can enter the descriptors of a potential game and your input will be fed into the model and the prediction will be displayed")
+
+st.write("If you want to see the prediction for a game without any descriptors just hit the predictor button")
+
+# maybe better to use the multiselect as opposed to input
+# but I think this is easier to set up for now
+
+
+
+descriptor_list = selected_features.copy()
+
+# needed to copy
+# seems otherwise they were pointing to the same thing
+
+descriptor_list.remove("num_descriptors")
+
+
+
+
+user_descriptors = st.multiselect('Descriptors', descriptor_list)
+
+clicked = st.button('Try out the Predictor?')
+
+
+
+
+
+if (clicked):
+
+    count = len(user_descriptors)
+
+    new_game_values = []
+
+
+    for descriptor in descriptor_list:
+    
+        if (descriptor in user_descriptors):
+        
+            new_game_values.append(1)
+            
+        else:
+            
+            new_game_values.append(0)
+            
+    
+    new_game_values.append(count)
+    
+    
+    
+    
+    
+    new_game_df = pd.DataFrame([new_game_values], columns=selected_features)
+
+ 
+
+    y_pred = final_model.predict(new_game_df)
+    
+    st.write("The model predicted that your game will be")
+
+    st.write(y_pred)
+
+    y_pred_proba = final_model.predict_proba(new_game_df)
+    
+    st.write("The probability for each of the categories in order of E, ET, M and T are")
+
+    st.write(y_pred_proba)
+    
+    
+
+
+    
