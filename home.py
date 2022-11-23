@@ -5,6 +5,15 @@ import pickle
 import plotly.express as px
 
 
+# added this to try and save resources
+
+# not sure why I got the mutation warning when I do not change the model
+
+@st.cache(allow_output_mutation=True)
+def load_model():
+	  return pickle.load(open('models/final_model.pkl', 'rb'))
+
+
 
 st.set_page_config(
     page_title="ESRB Prediction",
@@ -25,7 +34,7 @@ st.write("This is a website made to showcase a model to predict the ESRB ratings
 
 
 # Load the model you already created...
-final_model = pickle.load(open('models/final_model.pkl', 'rb'))
+final_model = load_model()
 
 # needed to save the model my own way instead of how the boilerplate way
 
