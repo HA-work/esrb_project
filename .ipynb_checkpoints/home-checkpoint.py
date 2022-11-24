@@ -25,7 +25,7 @@ st.write("This is a website made to showcase a model to predict the ESRB ratings
 
 
 # Load the model you already created...
-final_model = pickle.load(open('models/final_model.pkl', 'rb'))
+final_model = pickle.load(open('esrb_project/models/final_model.pkl', 'rb'))
 
 # needed to save the model my own way instead of how the boilerplate way
 
@@ -132,6 +132,17 @@ while old != user_descriptors:
     
     
 if (clicked):
+    # count = len(user_descriptors)
+    # new_game_values = []
+    # for descriptor in descriptor_list:
+    #     if (descriptor in user_descriptors):
+    #         new_game_values.append(1)
+    #     else:
+    #         new_game_values.append(0)
+    # new_game_values.append(count)
+    # new_game_df = pd.DataFrame([new_game_values], columns=selected_features)
+
+ 
 
     y_pred = final_model.predict(new_game_df)
     
