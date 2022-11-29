@@ -46,12 +46,12 @@ for items in selected_ESRB:
     dfone['sum'] = dfone.drop('esrb_rating', axis=0).sum(axis=1)
     dfone=dfone.drop('esrb_rating', axis=0)
     dfone['reasons']=dfone.index
-    dfone=dfone.sort_values(['sum'],ascending=False).head(many_shown).reset_index()
+    dfone=dfone.sort_values(['sum'],ascending=False).head(many_shown)
     data.append(go.Bar(
         x=dfone['sum'],
-        y=dfone['reasons'],
-        orientation='h',
-        name=items
+        y=dfone[ 'reasons'],
+        name=items,
+        orientation='h'
         ))
 
 fig = go.Figure(data=data)
@@ -61,7 +61,8 @@ fig.update_layout(
     bargroupgap=0,
     bargap=0.45,
     width=1080,
-    height=1000
+    height=1000,
+    yaxis={'categoryorder':'max ascending'}
 )
 fig.update_yaxes(automargin=True)
 
