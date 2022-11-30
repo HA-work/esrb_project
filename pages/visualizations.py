@@ -59,7 +59,8 @@ fig = go.Figure(data=data)
 fig.update_layout(
     autosize=False,
     bargroupgap=0,
-    bargap=0.45,
+    bargap=0.35,
+    barmode='stack',
     width=1080,
     height=1000,
     yaxis={'categoryorder':'max ascending'}
