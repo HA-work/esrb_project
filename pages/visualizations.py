@@ -63,7 +63,7 @@ fig.update_layout(
     barmode='stack',
     width=1080,
     height=1000,
-    yaxis={'categoryorder':'max ascending'}
+    yaxis={'categoryorder':'total ascending'}
 )
 fig.update_yaxes(automargin=True)
 
